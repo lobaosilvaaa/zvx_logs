@@ -38,6 +38,8 @@ jobs:
         run: |
           TIMESTAMP=$(date -u +"%H:%M UTC")
           COMMIT_COUNT=$(echo '${{ toJson(github.event.commits) }}' | jq '. | length')
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD | head -10)
+          FORMATTED_FILES=$(echo "$CHANGED_FILES" | sed 's/^/• /')
 
           curl -H "Content-Type: application/json" \
           -X POST \
@@ -75,6 +77,9 @@ jobs:
                   \"name\": \"📝 Commit Message\",
                   \"value\": \"${COMMIT_MESSAGE}\"
                 },
+                { 
+                  \"name\": \"📂 Updated Files\",
+                  \"value\": \"${FORMATTED_FILES}\" },
                 {
                   \"name\": \"🔗 Commit Link\",
                   \"value\": \"[View Commit](${COMMIT_URL})\"
