@@ -1,0 +1,1 @@
+print('^2[zvx_logs]^7 Monitoring system initialized.')
